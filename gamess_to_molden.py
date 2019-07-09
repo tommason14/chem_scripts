@@ -327,7 +327,7 @@ def collect_energy_data_for_molden_output(scfs, max_forces, rms_forces):
     return conv
 
 
-def remove_unneccesary_geometries(geoms, num_atoms):
+def remove_unneccesary_geometries(geoms, num_atoms, scfs):
     """
     Sometimes GAMESS prints out additional geometries, for example if the
     calculation results in a corrupted Hessian matrix. This function
@@ -375,7 +375,7 @@ def find_geometries(file, num_atoms):
             scfs, max_forces, rms_forces = grep_energy_data(line, scfs, max_forces, rms_forces)
     
     conv = collect_energy_data_for_molden_output(scfs, max_forces, rms_forces)
-    geoms = remove_unneccesary_geometries(geoms, num_atoms) 
+    geoms = remove_unneccesary_geometries(geoms, num_atoms,scfs) 
 
     return geoms, conv
 
