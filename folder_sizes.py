@@ -166,7 +166,11 @@ def usage_per_user(data):
             value = d['size']
             owners[owner] += value
 
-    return owners
+    # sort owners by size
+    tmp = [(k, v) for k, v in owners.items()]
+    tmp = sorted(tmp, key = lambda kv: kv[1])
+    
+    return {k: v for k, v in tmp}
 
 def main():
     print_disclaimer()
