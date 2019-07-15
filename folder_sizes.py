@@ -167,7 +167,7 @@ def usage_per_user(data):
             owners[owner] += value
     # sort owners by size
     tmp = [(k, v) for k, v in owners.items()]
-    tmp = sorted(tmp, key = lambda kv: kv[1])
+    tmp = sorted(tmp, key = lambda kv: kv[1], reverse=True)
     
     return {k: v for k, v in tmp}
 
