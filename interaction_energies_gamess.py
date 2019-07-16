@@ -1,20 +1,7 @@
 #!/usr/bin/env python3
 
-"""
-File: interaction_energies_psi4.py
-Author: Tom Mason
-Email: tommason14@gmail.com
-Github: https:github.com/tommason14
-Description: Uses the output of chem_assist -r (which writes to energies.csv).
-Note splits path on first directory of `Path`. Make sure these are different
-for each different system!
-"""
-
-
 import pandas as pd
 from dfply import *
-
-# make sure the parent folder of each path is used for each group
 
 @make_symbolic
 def if_else(bools, val_if_true, val_if_false):
@@ -26,7 +13,7 @@ print((df >>
     mutate(Config = X.Path.str.split('/').str[0]) >>
     mutate(Type = if_else(X.Path.str.contains('frag'), 'frag', 'complex')) >>
     mutate(HF = X['HF/DFT']) >>
-    mutate(SRS = X['HF/DFT'] + 1.64 * X.MP2_opp) >>
+    mutate(SRS = X['MP2/SRS']) >>
     mutate(Disp = X.SRS - X.HF) >>
     gather('energy', 'values', [X.HF, X.Disp]) >>
     mutate(energy_type = X.energy + '-' + X.Type) >>

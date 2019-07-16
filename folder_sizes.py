@@ -117,6 +117,7 @@ def print_table(dirs, lst, total):
     print(f"\nTotal size: {total}\n")
 
     per_user = usage_per_user(dirs)
+    print(per_user)
     per_user = change_size_to_readable(per_user)
     print('Usage per user:')
     for user, usage in per_user.items():
@@ -150,13 +151,15 @@ def change_size_to_readable(data):
         p = math.pow(1000, i)
         s = round(size_bytes / p, 2)
         return "%s %s" % (s, size_name[i])
-
+    print(data.items())
     return {k: convert_size(v) for k, v in data.items()}
     
 def usage_per_user(data):
     owners = {}
     for folder, d in data.items():
+        print(folder)
         try:
+            # here code doesn't work...
             owner = d['owner']
         except KeyError:
             continue
