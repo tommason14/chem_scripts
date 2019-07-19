@@ -1,7 +1,7 @@
 #!/bin/bash
 if (env | grep -Fq SLURM)
 then
-  for f in $(squeue -u tmason | grep tmason | awk '{print $1}')
+  for f in $(squeue -u $USER | grep $USER | awk '{print $1}')
   do
   echo $f
   scontrol show jobid $f | grep Command | cut -d '=' -f 2
