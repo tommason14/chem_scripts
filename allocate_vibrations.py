@@ -437,6 +437,7 @@ class Molecule:
     Neutrals['dopamine-c=c-carbonyl'] = ['O','O','C','C','C','C','C','C','C','C','N','H','H','H','H','H']
     Neutrals['dopamine-c=c-hydroxyl'] = ['O','O','C','C','C','C','C','C','C','C','N','H','H','H','H','H','H','H']
     Neutrals['dopamine-c-c-hydroxyl'] = ['O','O','C','C','C','C','C','C','C','C','N','H','H','H','H','H','H','H','H','H']
+    # Neutrals['platinum cluster'] =
     
     Radicals = {}
 
@@ -772,7 +773,6 @@ class Molecule:
 
         # remove empty lists, sort atoms by index
         self.mol_dict = {k:v for k,v in self.mol_dict.items() if len(v)>0}
-        print(self.mol_dict) 
         for mol in self.mol_dict.values():
             mol.sort(key = lambda atom: atom.index)
 
@@ -784,16 +784,13 @@ class Molecule:
 
         if not hasattr(self, 'fragments'):
             self.separate()
-        print(atom)
 
         for frag in self.fragments.values():
-            # print(frag['name'])
             for a in frag['atoms']:
                 if a.index == atom.index:
                     if frag['name'] is not None:
                         return frag['name']
                     else:
-                        print(frag['atoms'])
                         # if molecules not known
                         formula  = {}
                         for at in frag['atoms']:
