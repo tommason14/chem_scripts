@@ -44,18 +44,12 @@ for logfile in files:
                 if re.search(charge_regex, line):
                     res[counter].append(float(line.split()[1]))
                     counter += 1
-
         coords = [atom[1] for atom in res]
         mol = Molecule(atoms = coords)
         mol.separate()
         # bad practice, should use for i, j in zip(mol.coords, res):
         for atom, r in zip(mol.coords, res):
-            print(atom)
-            print(r) 
-        # for i, atom in enumerate(mol.coords):
-            # path, _, geodesic_charge = res[i]
-            # index = i + 1
-            # results.append([path, index, atom.symbol, geodesic_charge, atom.x, atom.y, atom.z,
-    # f"{mol.fragments[atom.mol]['name']}_{atom.mol}"])
+            path, _, geodesic_charge = r
+            results.append([path, atom.index, atom.symbol, geodesic_charge, atom.x, atom.y, atom.z, f"{mol.fragments[atom.mol]['name']}_{atom.mol}"])
 
-# write_csv_from_nested(results, col_names = ('Path', 'Index', 'Element', 'Geodesic', 'Rx', 'Ry', 'Rz', 'Fragment'))
+write_csv_from_nested(results, col_names = ('Path', 'Index', 'Element', 'Geodesic', 'Rx', 'Ry', 'Rz', 'Fragment'), filename='charges.csv')

@@ -217,7 +217,7 @@ def human_readable_sizes(dirs, exclude):
     readable = subprocess.run(command, encoding = 'utf-8',
                stdout = subprocess.PIPE, stderr = subprocess.STDOUT)
 
-    if 'invalid' in readable.stdout:     
+    if any(bad_string in readable.stdout for bad_string in ('invalid', 'not permitted')):     
         command = ['du', '-h', '--max-depth=1']
         command = add_excluded_folders(command, exclude)
         readable = subprocess.run(command, encoding = 'utf-8',
