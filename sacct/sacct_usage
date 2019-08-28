@@ -1,0 +1,6 @@
+#!/bin/bash
+
+command="sacct -S 2018-08-01 -E 2019-08-28 --format=JobName,Elapsed,CPUTime,ExitCode,AllocNodes,AllocCPUS | sed '/batch/d;/extern/d' | grep '^c4\|ch[0-9]'"
+
+eval $command | ./sacct_time
+eval $command | ./sacct_cpus
