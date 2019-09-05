@@ -1,0 +1,12 @@
+#!/bin/sh
+
+xelatex $1
+bibtex ${1%.tex}
+xelatex $1
+xelatex $1
+
+extras="*.bbl *.log *.blg *.out *.lof *.lot *.toc *.aux"
+for f in ${extras[@]}
+do
+  [[ -f $f ]] && rm $f
+done
