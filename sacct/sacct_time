@@ -18,7 +18,7 @@ more_than_one_day(){
 }
 
 less_than_one_day(){
- # del with jobs running for less than one day, with times printed as hours:mins:secs
+ # deal with jobs running for less than one day, with times printed as hours:mins:secs
   from_output=$(printf '%s\n' $times | sed '/-/d' | awk -F ':' '{hours += $1; mins += $2; secs += $3} END {print hours,mins,secs}')
   convert_summed_to_correct $from_output
 }
