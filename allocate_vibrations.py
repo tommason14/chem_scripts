@@ -43,7 +43,6 @@ parser.add_argument('-t', '--tail', help='Print the last n vibrations', action='
 parser.add_argument('-w', '--weak', help='Lowest intensity transition to look for (w for weak). Pass in an integer', action='store', type = int)
 args = parser.parse_args()
 
-
 def responsive_table(data, strings, min_width):
     """
     Returns a table that is responsive in size to every column.

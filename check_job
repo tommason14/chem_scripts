@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+scontrol show jobid $1  
