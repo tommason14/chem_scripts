@@ -815,7 +815,14 @@ def check_inputs(args):
     if args.number == args.tail != None: # if defined
         sys.exit("Error: Number of lines from top (n) and number of lines from bottom (t) can't be the same! Change values")
         
-    groups = subprocess.check_output('grep "\[" ' + args.file, shell = True)
+    try:
+        groups = subprocess.check_output('grep "\[" ' + args.file, shell = True)
+    except subprocess.CalledProcessError:
+        sys.exit("""\
+Incorrect file format. 
+Run gamess_to_molden.py first on a GAMESS 
+hessian calculation, and use that file here""")
+        
     if b'FREQ' not in groups:
         sys.exit("""\
 Incorrect file format. 
