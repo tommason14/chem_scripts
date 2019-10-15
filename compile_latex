@@ -8,3 +8,4 @@ bibtex ${1%.tex}
 xelatex $1
 xelatex $1
 
+printf '%s\n' ${extras[@]} | xargs -I {} bash -c "[[ -f {} ]] && rm {}"

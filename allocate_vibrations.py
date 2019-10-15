@@ -43,7 +43,6 @@ parser.add_argument('-t', '--tail', help='Print the last n vibrations', action='
 parser.add_argument('-w', '--weak', help='Lowest intensity transition to look for (w for weak). Pass in an integer', action='store', type = int)
 args = parser.parse_args()
 
-
 def responsive_table(data, strings, min_width):
     """
     Returns a table that is responsive in size to every column.
@@ -816,7 +815,14 @@ def check_inputs(args):
     if args.number == args.tail != None: # if defined
         sys.exit("Error: Number of lines from top (n) and number of lines from bottom (t) can't be the same! Change values")
         
-    groups = subprocess.check_output('grep "\[" ' + args.file, shell = True)
+    try:
+        groups = subprocess.check_output('grep "\[" ' + args.file, shell = True)
+    except subprocess.CalledProcessError:
+        sys.exit("""\
+Incorrect file format. 
+Run gamess_to_molden.py first on a GAMESS 
+hessian calculation, and use that file here""")
+        
     if b'FREQ' not in groups:
         sys.exit("""\
 Incorrect file format. 

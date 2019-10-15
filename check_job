@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+if (env | grep -Fq SLURM || env | grep -Fq TACC)
+then
+  scontrol show jobid $1  
+fi
