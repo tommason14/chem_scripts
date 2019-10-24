@@ -621,6 +621,10 @@ def main(log, new_file):
     elif calc == "fmohess":
         data = hessian_params(log)
         write_file(data, new_file)
+    else:
+        print('Run type not accounted for. This script only converts',
+        'optimisations or Hessian matrix calculations into a',
+        'molden-readable format.')
 
  
 main(logfile, newfile)
