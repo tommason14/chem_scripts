@@ -43,6 +43,6 @@ fi
 
 if [[ ${#err[@]} -gt 0 ]]
 then
-  echo "No Gaussian or errored or incomplete:"
+  echo "Errored or incomplete:"
   printf '\t%s\n' ${err[@]}
 fi
