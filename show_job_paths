@@ -1,4 +1,5 @@
 #!/bin/bash
+
 if (env | grep -Fq SLURM || env | grep -Fq TACC)
 then
   # for f in $(squeue -u $USER | grep $USER | awk '{print $1}')
