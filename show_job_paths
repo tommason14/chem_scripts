@@ -1,10 +1,11 @@
 #!/bin/bash
 if (env | grep -Fq SLURM || env | grep -Fq TACC)
 then
-  for f in $(squeue -u $USER | grep $USER | awk '{print $1}')
-  do
-  echo $f
-  scontrol show jobid $f | grep Command | cut -d '=' -f 2
-  done
+  # for f in $(squeue -u $USER | grep $USER | awk '{print $1}')
+  # do
+  # echo $f
+  # scontrol show jobid $f | grep Command | cut -d '=' -f 2
+  # done
+  squeue -o "%10i %Z %R" -u $USER | tail -n+2 | awk -F"/" '{OFS="/"; print $1,$(NF-2),$(NF-1),$NF}'
 fi
 
