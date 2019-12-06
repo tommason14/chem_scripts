@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source ~/.bash_aliases # need plot commands
+
 for f in $(squeue -u $USER | grep $USER | awk '{print $1}')
 do 
 cd $(scontrol show jobid $f | grep WorkDir | awk -F '=' '{print $2}')
