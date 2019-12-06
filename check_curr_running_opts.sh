@@ -14,7 +14,7 @@ else
   then
   cat opt.log | plotfmo
   else
-  cat opt.log | plotmp2) 
+  cat opt.log | plotmp2
   fi
 fi
 done
