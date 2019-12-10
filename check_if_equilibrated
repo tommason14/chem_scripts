@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import glob
 import subprocess
 from tqdm import tqdm
@@ -7,9 +8,12 @@ from tqdm import tqdm
 def find_configs():
     """
     Returns all directories in the current working directory:
-    assumes that these will be individual configs
+    assumes that these will be individual configs. Checks to 
+    see if there is an .inp/.job file in the directory below
     """
-    return glob.glob('*/')
+    return [d for d in glob.glob('*/') 
+           if any(f.endswith(x) for f in os.listdir(d) 
+           for x in ('inp', 'job'))]
 
 def find_logs():
     """
@@ -87,9 +91,12 @@ def check_configs_for_equilibration(config_dict):
         if not found_equilibrium:
             no_equilibrium.append(config)
 
-    print('No equilibrium found for:')
-    for f in no_equilibrium:
-        print('\t' + f)
+    if len(no_equilibrium) > 0:
+        print('No equilibrium found for:')
+        for f in no_equilibrium:
+            print('\t' + f)
+    else:
+        print('All structures optimised')
 
 def main():
     configs = find_configs()
