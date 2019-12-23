@@ -12,4 +12,5 @@ exit
 fi
 
 header=$(cat "$@" | head -1)
+echo "$header"
 cat "$@" | grep -v "$header" | sort -t ',' -k 1 
