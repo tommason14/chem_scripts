@@ -13,5 +13,6 @@
 cat $@ | sed '2,${/File/d;}' > tmp_file
 header=$(head -n 1 tmp_file)
 echo $header
-cat tmp_file | tail -n +2 | sort -t ',' -k 1
+# remove other header lines
+grep -v "Config" tmp_file | sort -t ',' -k 1
 rm tmp_file
