@@ -1,17 +1,15 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
-# help="Pass in csv files that you would like to combine.\n"
-# help+="i.e. combine_csvs file1 file2\n"
-# help+="Note: Assumes that header lines include the word 'File'\n"
-#
-# if grep -eq "-h" "$@"
-# then 
-# echo $help
-# exit 
-# fi
+if [ $# -eq 0 ] || [ "$1" = "-h" ]
+then 
+cat << ENDHELP
+Pass in csv files that you would like to combine.
+i.e. combine_csvs file1 file2
+Note: Assumes that header lines are the same in all csvs.
+Result is passed to STDOUT
+ENDHELP
+exit 
+fi
 
-cat $@ | sed '2,${/File/d;}' > tmp_file
-header=$(head -n 1 tmp_file)
-echo $header
-cat tmp_file | tail -n +2 | sort -t ',' -k 1
-rm tmp_file
+header=$(cat "$@" | head -1)
+cat "$@" | grep -v "$header" | sort -t ',' -k 1 
