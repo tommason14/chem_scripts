@@ -28,6 +28,15 @@ def results(logfile):
             return val(logfile)
 
 
+def check_for_prog(lst):
+    """
+    Decides if a progress bar is necessary or not
+    """
+    if len(lst) > 5:
+        return tqdm(lst)
+    return lst
+
+
 with open("uv_vis.csv", "w") as f:
     f.write(
         "Config,"
@@ -37,7 +46,7 @@ with open("uv_vis.csv", "w") as f:
         "Wavelength (nm),"
         "Intensity (au)\n"
     )
-    for logfile in tqdm(glob("**/*log", recursive=True)):
+    for logfile in check_for_prog(glob("**/*log", recursive=True)):
         log = results(logfile)
         if log is None:
             continue  # if not gaussian/orca job
