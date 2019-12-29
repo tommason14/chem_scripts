@@ -44,7 +44,7 @@ def check_user_input(user_input, condition, if_error):
 
 def run_script_to_check_for_eqm():
     print("Running chem_assist --equil-coords... ", end="")
-    os.system("chem_assist --equil-coords")
+    os.system("chem_assist --equil-coords > /dev/null")
     print("Done")
 
 
@@ -195,10 +195,8 @@ def main():
             lambda item: item.lower() in ("y", "n"),
             "Please enter 'Y' or 'N'",
         )
-        print(copy)
-        # if copy:
-        #     new_xyz_dict = find_rerun_coords(unequilibrated_dict)
-        #     copy_xyzs_to_new_subfolder(new_xyz_dict)
-
+        if copy.lower == 'y':
+            new_xyz_dict = find_rerun_coords(unequilibrated_dict)
+            copy_xyzs_to_new_subfolder(new_xyz_dict)
 
 main()
