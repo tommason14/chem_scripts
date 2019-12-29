@@ -184,7 +184,7 @@ def copy_xyzs_to_new_subfolder(new_xyz_dict):
 
 
 def main():
-    # run_script_to_check_for_eqm()
+    run_script_to_check_for_eqm()
     configs = find_configs()
     logs = find_logs()
     config_dict = map_logs_to_each_config(configs, logs)
@@ -195,9 +195,10 @@ def main():
             lambda item: item.lower() in ("y", "n"),
             "Please enter 'Y' or 'N'",
         )
-        if copy:
-            new_xyz_dict = find_rerun_coords(unequilibrated_dict)
-            copy_xyzs_to_new_subfolder(new_xyz_dict)
+        print(copy)
+        # if copy:
+        #     new_xyz_dict = find_rerun_coords(unequilibrated_dict)
+        #     copy_xyzs_to_new_subfolder(new_xyz_dict)
 
 
 main()
