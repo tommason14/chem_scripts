@@ -5,13 +5,37 @@ import glob
 import subprocess
 from tqdm import tqdm
 from shutil import copyfile
+import sys
+
+
+def check_cli_args():
+    """
+    Checks command line arguments to make sure a file is passed in with some job settings.
+    i.e. script.py settings.py
+    """
+    _string = f"""Syntax: ./{os.path.basename(__file__)} settings_file.py
+
+  Make sure the settings file creates a job, for example, by calling
+  GamessJob/OrcaJob in that file.
+
+  Example file:
+    from chem_assistant import Settings,GamessJob
+    from glob import glob
+
+    sett = Settings()
+    sett.input.pcm.solvnt = 'C2H5OH'
+
+    GamessJob(glob('*xyz')[0], fmo=True, settings=sett)
+    """
+    if len(sys.argv) != 2 or "h" in sys.argv[1]:
+        sys.exit(_string)
 
 
 def check_user_input(user_input, condition, if_error):
     """
-    Uses a try/except statement to create a scenario where the 
-    end user cannot give unexpected input. 
-    Give the condition referring to an item in a lambda expression 
+    Uses a try/except statement to create a scenario where the
+    end user cannot give unexpected input.
+    Give the condition referring to an item in a lambda expression
     i.e. lambda item: item.endswith('.csv'), or lambda item: item in range(...)
 
     Usage:
@@ -51,7 +75,7 @@ def run_script_to_check_for_eqm():
 def find_configs():
     """
     Returns all directories in the current working directory:
-    assumes that these will be individual configs. Checks to 
+    assumes that these will be individual configs. Checks to
     see if there is an .inp/.job file in the directory below
     """
     return [
@@ -72,7 +96,7 @@ def map_logs_to_each_config(configs, logs):
     """
     For each config (each subdirectory in the cwd),
     see if the log file is a descendant of that config.
-    If it is, put it in a list associated with that 
+    If it is, put it in a list associated with that
     config
     """
     conf_dict = {conf[:-1]: [] for conf in configs}
@@ -135,67 +159,78 @@ def check_configs_for_equilibration(config_dict):
     Returns a dictionary of configs that have reached
     equilibrium
     """
-    equilibrium = []
+    no_equilibrium = []
 
     for config, logs in tqdm(config_dict.items()):
         found_equilibrium = False
         for log in logs:
             if equilibrated(log):
                 found_equilibrium = True
-        if found_equilibrium:
-            equilibrium.append(config)
+        if not found_equilibrium:
+            no_equilibrium.append(config)
 
-    if len(equilibrium) > 0:
-        print("Equilibrium found for:")
-        for f in equilibrium:
+    if len(no_equilibrium) > 0:
+        print("No equilibrium found for:")
+        for f in no_equilibrium:
             print("\t" + f)
     else:
-        print("No structures optimised")
+        print("All structures optimised")
 
-    return {k: v for k, v in config_dict.items() if k in equilibrium}
+    return {k: v for k, v in config_dict.items() if k in no_equilibrium}
 
-def find_equil_coords(equilibrated_dict):
+
+def find_rerun_dir(unequilibrated_dict):
     """
     Returns a dictionary of each configuration
-    with the corresponding equilibrated coordinates
+    with the corresponding directory to resubmit from
     """
-    newxyz_files = {}
+    newdirs = {}
 
-    for config, coord_list in equilibrated_dict.items():
+    for config, coord_list in unequilibrated_dict.items():
         if len(coord_list) > 0:
             final_log = max(coords for coords in coord_list)
-            equil_coord_dir = os.path.dirname(final_log) + "/spec"
-            xyzfile = [f for f in os.listdir(equil_coord_dir)
-                      if f.endswith("xyz")][0]
-            newxyz_files[config] = f"{equil_coord_dir}/{xyzfile}"
-    return newxyz_files
+            rerun_coord_dir = os.path.dirname(final_log) + "/rerun"
+            newdirs[config] = f"{rerun_coord_dir}"
+    return newdirs
 
 
-def copy_xyzs_to_new_subfolder(new_xyz_dict):
+def copy_settings_file_to_subfolder(newdirs, settings_file):
     """
-    Checks for target directory and copies over xyz files
+    Checks for target directory and copies over a settings file
     """
-    newdir = os.path.join(os.getcwd(), "equilibrated_xyzs")
-    if not os.path.isdir(newdir):
-        os.mkdir(newdir)
-    for config, xyz in new_xyz_dict.items():
-        copyfile(xyz, f'{newdir}/{config}.xyz')
+    for config, newdir in newdirs.items():
+        copyfile(settings_file, f"{newdir}/{settings_file}")
+
+
+def make_new_files(newdirs, settings_file):
+    """
+    Asks the user if they want the new files creating
+    """
+    make_new_files = check_user_input(
+        "Make new files? [Y/N]: ",
+        lambda user_input: user_input.lower() in ("y", "n"),
+        "Please enter 'Y' or 'N'",
+    )
+    if make_new_files.lower() == "y":
+        cwd = os.getcwd()
+        for newdir in newdirs.values():
+            os.chdir(newdir)
+            os.system(f"python3 {settings_file}")
+            os.chdir(cwd)
 
 
 def main():
+    check_cli_args()
+    settings_file = sys.argv[1]
     run_script_to_check_for_eqm()
     configs = find_configs()
     logs = find_logs()
     config_dict = map_logs_to_each_config(configs, logs)
-    equilibrated_dict = check_configs_for_equilibration(config_dict)
-    if len(equilibrated_dict) > 0:
-        copy = check_user_input(
-            "Copy equil geoms to new folder? [Y/N] ",
-            lambda item: item.lower() in ("y", "n"),
-            "Please enter 'Y' or 'N'",
-        )
-        if copy.lower() == 'y':
-            new_xyz_dict = find_equil_coords(equilibrated_dict)
-            copy_xyzs_to_new_subfolder(new_xyz_dict)
+    unequilibrated_dict = check_configs_for_equilibration(config_dict)
+    if len(unequilibrated_dict) > 0:
+        new_dirs = find_rerun_dir(unequilibrated_dict)
+        copy_settings_file_to_subfolder(new_dirs, settings_file)
+        make_new_files(new_dirs, settings_file)
+
 
 main()
