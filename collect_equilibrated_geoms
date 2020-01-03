@@ -132,43 +132,42 @@ def check_configs_for_equilibration(config_dict):
     Loops through the dictionary of the form
         { 'config' : [file1, file2, file3] }
     to see if there is an equilibrated geometry in any of the logs.
-    Returns a dictionary of configs that have not reached
+    Returns a dictionary of configs that have reached
     equilibrium
     """
-    no_equilibrium = []
+    equilibrium = []
 
     for config, logs in tqdm(config_dict.items()):
         found_equilibrium = False
         for log in logs:
             if equilibrated(log):
                 found_equilibrium = True
-        if not found_equilibrium:
-            no_equilibrium.append(config)
+        if found_equilibrium:
+            equilibrium.append(config)
 
-    if len(no_equilibrium) > 0:
-        print("No equilibrium found for:")
-        for f in no_equilibrium:
+    if len(equilibrium) > 0:
+        print("Equilibrium found for:")
+        for f in equilibrium:
             print("\t" + f)
     else:
-        print("All structures optimised")
+        print("No structures optimised")
 
-    return {k: v for k, v in config_dict.items() if k in no_equilibrium}
+    return {k: v for k, v in config_dict.items() if k in equilibrium}
 
-
-def find_rerun_coords(unequilibrated_dict):
+def find_equil_coords(equilibrated_dict):
     """
     Returns a dictionary of each configuration
     with the corresponding coordinates to resubmit
     """
     newxyz_files = {}
 
-    for config, coord_list in unequilibrated_dict.items():
+    for config, coord_list in equilibrated_dict.items():
         if len(coord_list) > 0:
             final_log = max(coords for coords in coord_list)
-            rerun_coord_dir = os.path.dirname(final_log) + "/rerun"
-            xyzfile = [f for f in os.listdir(rerun_coord_dir)
+            equil_coord_dir = os.path.dirname(final_log) + "/spec"
+            xyzfile = [f for f in os.listdir(equil_coord_dir)
                       if f.endswith("xyz")][0]
-            newxyz_files[config] = f"{rerun_coord_dir}/{xyzfile}"
+            newxyz_files[config] = f"{equil_coord_dir}/{xyzfile}"
     return newxyz_files
 
 
@@ -176,7 +175,7 @@ def copy_xyzs_to_new_subfolder(new_xyz_dict):
     """
     Checks for target directory and copies over xyz files
     """
-    newdir = os.path.join(os.getcwd(), "rerun_xyzs")
+    newdir = os.path.join(os.getcwd(), "equilibrated_xyzs")
     if not os.path.isdir(newdir):
         os.mkdir(newdir)
     for config, xyz in new_xyz_dict.items():
@@ -188,15 +187,15 @@ def main():
     configs = find_configs()
     logs = find_logs()
     config_dict = map_logs_to_each_config(configs, logs)
-    unequilibrated_dict = check_configs_for_equilibration(config_dict)
-    if len(unequilibrated_dict) > 0:
+    equilibrated_dict = check_configs_for_equilibration(config_dict)
+    if len(equilibrated_dict) > 0:
         copy = check_user_input(
-            "Copy reruns to new folder? [Y/N] ",
+            "Copy equil geoms to new folder? [Y/N] ",
             lambda item: item.lower() in ("y", "n"),
             "Please enter 'Y' or 'N'",
         )
         if copy.lower() == 'y':
-            new_xyz_dict = find_rerun_coords(unequilibrated_dict)
+            new_xyz_dict = find_equil_coords(equilibrated_dict)
             copy_xyzs_to_new_subfolder(new_xyz_dict)
 
 main()
