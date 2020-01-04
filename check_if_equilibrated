@@ -43,9 +43,8 @@ def check_user_input(user_input, condition, if_error):
 
 
 def run_script_to_check_for_eqm():
-    print("Running chem_assist --equil-coords... ", end="")
-    os.system("chem_assist --equil-coords > /dev/null")
-    print("Done")
+    print("Running chem_assist --equil-coords... ")
+    os.system("chem_assist --equil-coords")
 
 
 def find_configs():
