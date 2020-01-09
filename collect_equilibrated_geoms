@@ -157,7 +157,7 @@ def check_configs_for_equilibration(config_dict):
 def find_equil_coords(equilibrated_dict):
     """
     Returns a dictionary of each configuration
-    with the corresponding coordinates to resubmit
+    with the corresponding equilibrated coordinates
     """
     newxyz_files = {}
 
