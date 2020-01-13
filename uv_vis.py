@@ -14,6 +14,15 @@ changed.
 from chem_assistant import GaussianResults, OrcaResults, get_log_type
 from glob import glob
 from tqdm import tqdm
+import sys
+
+
+def results_filename():
+    if len(sys.argv) > 2:
+        sys.exit("Syntax: uv_vis.py <optional csv filename>")
+    if len(sys.argv) == 2:
+        return sys.argv[1]
+    return "uv_vis.csv"
 
 
 def results(logfile):
@@ -37,27 +46,26 @@ def check_for_prog(lst):
     return lst
 
 
-with open("uv_vis.csv", "w") as f:
-    f.write(
-        "Config,"
-        "Root,"
-        "Iteration,"
-        "Transition Energies (eV),"
-        "Wavelength (nm),"
-        "Intensity (au)\n"
-    )
-    for logfile in check_for_prog(glob("**/*log", recursive=True)):
-        log = results(logfile)
-        if log is None:
-            continue  # if not gaussian/orca job
-        for iteration, data in enumerate(
-            zip(
-                log.td_dft_wavelengths,
-                log.td_dft_intensities,
-                log.td_dft_transition_energies,
-            ),
-            1,
-        ):
-            waves, ints, energies = data
-            for wave, intensity, energy in zip(waves, ints, energies):
-                f.write(f"{logfile},NA,{iteration},{energy},{wave},{intensity}\n")
+def write_results(filename):
+    with open(filename, "w") as f:
+        f.write(
+            "Config," "Root," "Iteration," "Transition Energies (eV)," "Wavelength (nm)," "Intensity (au)\n"
+        )
+        for logfile in check_for_prog(glob("**/*log", recursive=True)):
+            log = results(logfile)
+            if log is None:
+                continue  # if not gaussian/orca job
+            for iteration, data in enumerate(
+                zip(log.td_dft_wavelengths, log.td_dft_intensities, log.td_dft_transition_energies,), 1,
+            ):
+                waves, ints, energies = data
+                for wave, intensity, energy in zip(waves, ints, energies):
+                    f.write(f"{logfile},NA,{iteration},{energy},{wave},{intensity}\n")
+
+
+def main():
+    filename = results_filename()
+    write_results(filename)
+
+if __name__ == "__main__":
+    main()
