@@ -11,14 +11,19 @@ sed 's/$/ \\\\/'
 data="$1"
 header=$(head -1 "$data")
 
-echo "\\begin{table}[h]"
-echo "  \\begin{tabular}{|cc|}"
-echo "  \hline" 
-echo "  $header" | replace_comma_with_ampersand | add_newline
-echo "  \hline"
+
+echo "\\begin{longtable}{|c|c|}"
+echo "\hline"
+echo "Frequencies (cm$^{-1}$) & Intensities \\"
+echo "\hline"
+echo "\endfirsthead"
+echo "\hline"
+echo "Frequencies (cm$^{-1}$) & Intensities \\" 
+echo "\hline"
+echo "\endhead"
+echo "\hline \multicolumn{2}{r}{\textit{Continued on next page}} \\"
+echo "\endfoot"
 printf "  %s\n" $(tail -n +2 "$data") | replace_comma_with_ampersand | add_newline
-echo "  \hline"
-echo " \end{tabular}"
 echo "\caption{}"
 echo "\label{fig:"$data"}"
 echo "\end{table}"
