@@ -7,9 +7,11 @@ else
   snipdir="$HOME/vim-snippets"
 fi
 
+# Push to github
 cd "$snipdir"
 git add .
 git commit -m "Snippets updated"
 git push 
 
+# Pull changes into $HOME/.vim/bundle
 vim -c ":PluginUpdate vim-snippets" -c ":q" -c ":q"
