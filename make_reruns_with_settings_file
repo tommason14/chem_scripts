@@ -103,7 +103,7 @@ def map_logs_to_each_config(configs, logs):
 
     for log in logs:
         for k, v in conf_dict.items():
-            if k in log:
+            if f"{k}/" in log:
                 v.append(log)
 
     return conf_dict
@@ -117,7 +117,7 @@ def find_calc_type(log):
     with open(log, "r") as f:
         first_line = f.readline()
 
-    software = {"GAMESS": "GAMESS", "Gaussian": ["g16", "checkpoint"]}
+    software = {"GAMESS": ["GAMESS"], "Gaussian": ["Gaussian", "g16", "checkpoint"]}
 
     for calc_type, options in software.items():
         if any(value in first_line for value in options):
