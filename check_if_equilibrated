@@ -64,7 +64,7 @@ def find_logs():
     """
     Returns all log files
     """
-    return glob.glob("**/*[log|out]", recursive=True)
+    return [log for log in glob.glob("**/*[log|out]", recursive=True) if log != 'freq.log']
 
 
 def map_logs_to_each_config(configs, logs):
