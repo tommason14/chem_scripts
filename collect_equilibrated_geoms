@@ -65,7 +65,7 @@ def find_logs():
     """
     Returns all log files
     """
-    return glob.glob("**/*log", recursive=True)
+    return glob.glob("**/*[log|out]", recursive=True)
 
 
 def map_logs_to_each_config(configs, logs):
@@ -79,7 +79,7 @@ def map_logs_to_each_config(configs, logs):
 
     for log in logs:
         for k, v in conf_dict.items():
-            if k in log:
+            if f"{k}/" in log:
                 v.append(log)
 
     return conf_dict
