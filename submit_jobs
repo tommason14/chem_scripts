@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+if [[ $HOSTNAME =~ (magnus|monarch|m3|stampede) ]]; then
+    submit=sbatch
+else
+    if [[ $HOSTNAME =~ (raijin|gadi) ]]; then
+        submit=qsub
+    fi
+fi
+cwd=$(pwd)
+for f in $(find . -path "*job")
+do
+    cd $(dirname $f)
+    logs_in_dir=$(ls *log 2>/dev/null | wc -l)
+    [[ $logs_in_dir -eq 0 ]] && $submit $(basename $f)
+    cd $cwd
+done
