@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import re
 import os
 import glob
 import subprocess
@@ -65,7 +66,8 @@ def find_logs():
     """
     Returns all log files, but not frequency calcs
     """
-    return [log for log in glob.glob("**/*[log|out]", recursive=True) if log != 'freq.log']
+    return [log for log in glob.glob("**/*[log|out]", recursive=True)
+            if log != 'freq.log' and not re.search("slurm-[0-9]+.out", log)]
 
 
 def map_logs_to_each_config(configs, logs):
@@ -111,6 +113,8 @@ def equilibrated(log):
     }
 
     calc_type = find_calc_type(log)
+    print(log)
+    print(calc_type)
     lookup = term_to_search_for[calc_type]
 
     # grep exit codes:
