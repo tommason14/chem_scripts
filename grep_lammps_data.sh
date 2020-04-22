@@ -4,6 +4,8 @@
 # Sort by Step (the first value of the dump command
 # Print to first argument, or data.csv otherwise.
 
+output=${1-data.csv}
+echo "Writing lammps data to $output"
 
 # data- assumes Step is the first value of dump
 ls log.lammps* | 
@@ -18,6 +20,6 @@ ls log.lammps* |
   xargs grep Step |
   sed 's/^\s\+//;s/\s\+$//;s/\s\+/,/g' > header.tmp
 
-cat header.tmp data.tmp > ${1:-data.csv}
+cat header.tmp data.tmp > $output
 
 rm header.tmp data.tmp
