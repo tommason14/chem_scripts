@@ -1,13 +1,13 @@
 #!/bin/sh
 
 # Grep data from all log.lammps* files.
-# Sort by Step (the first value of the dump command
+# Sort by timestep, the first value of the thermo_style command
 # Print to first argument, or data.csv otherwise.
 
 output=${1-data.csv}
 echo "Writing lammps data to $output"
 
-# data- assumes Step is the first value of dump
+# data- assumes Step is the first value of thermo_style
 ls log.lammps* | 
   xargs sed -n '/Step/,/Loop/{/Step/!{/Loop/!p}}' |
   sort -nk 1 |
