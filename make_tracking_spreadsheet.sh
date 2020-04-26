@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 files=$(ls -1 *xyz)
 columns=("Files" ${@})

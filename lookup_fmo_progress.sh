@@ -1,6 +1,6 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
-if [[ $# -ne 1 ]]
+if [ $# -ne 1 ]
 then
 echo "Error: pass in filename"
 exit 1

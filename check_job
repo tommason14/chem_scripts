@@ -1,6 +1,6 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
-[ $# -ne 1 ] || [ $1 == '-h' ] && echo "Syntax: check_job jobid" && exit 1
+[ $# -ne 1 ] || [ $1 = '-h' ] && echo "Syntax: check_job jobid" && exit 1
 
 if (env | grep -Fq SLURM || env | grep -Fq TACC)
 then

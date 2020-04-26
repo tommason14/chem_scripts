@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 SCR_DIR="/home/$USER/scratch"
 cd $SCR_DIR

@@ -43,7 +43,7 @@ if len(args.still) != len(args.move):
 def extend_bond(atom1, atom2, atoms, dist):
     """
     Finding vector between atoms 1 and 2, then scale that vector by a ratio of desired length over
-    the orginal, and moving atom2 by adding the scaled vector back onto atom1's coordinates and
+    the original, and moving atom2 by adding the scaled vector back onto atom1's coordinates and
     reassigning them to atom2. Returns a new list of atoms
     """
     a_one = atoms[atom1 - 1]
@@ -53,7 +53,6 @@ def extend_bond(atom1, atom2, atoms, dist):
     scaling_factor = (original_distance + dist) / original_distance
     scaled = tuple((coord * scaling_factor) for coord in vec)
     added = tuple((i + j) for i, j in zip(a_one.coords, scaled))
-    final_distance = (sum(i ** 2 for i in a_one.vector_to(added))) ** 0.5
     atoms[atom2 - 1] = Atom(a_two.symbol, coords=added)
     print(f"{a_one.symbol}-{a_two.symbol} ({atom1}-{atom2}) extended by {dist} Å")
     return atoms

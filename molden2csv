@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # convert molden output, tab separated, to a csv with headers
 
