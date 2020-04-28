@@ -8,8 +8,8 @@ cwd=$(pwd)
 
 while read line
 do
-  cd $(dirname "$line")
+  cd "$(dirname "$line")"
   log=$(ls *log 2>/dev/null | wc -l)
-  [[ $log -eq 0 ]] && $submit $(basename "$line")
+  [[ $log -eq 0 ]] && $submit "$(basename "$line")"
   cd $cwd
 done < /dev/stdin
