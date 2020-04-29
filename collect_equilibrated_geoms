@@ -113,8 +113,6 @@ def equilibrated(log):
     }
 
     calc_type = find_calc_type(log)
-    print(log)
-    print(calc_type)
     lookup = term_to_search_for[calc_type]
 
     # grep exit codes:
