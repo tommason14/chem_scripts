@@ -27,7 +27,7 @@ find_xyz(){
     cp "$xyz" "$newdir/$struct.xyz"
 }
 
-structs=$(find . -type d -depth 1 | awk -F'/' '{print $2}' | grep -v $newdir)
+structs=$(find . -maxdepth 1 -type d | grep -v "^\.$" | awk -F'/' '{print $2}' | grep -v "$newdir")
 while read -r struct
 do
 find_xyz $struct
