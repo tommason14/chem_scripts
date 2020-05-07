@@ -1,4 +1,4 @@
-from chem_assistant import Settings, GaussJob
+from autochem import Settings, GaussJob
 from glob import glob
 import os
 

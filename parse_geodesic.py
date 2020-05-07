@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from chem_assistant import (Atom, Molecule,
+from autochem import (Atom, Molecule,
 read_file, get_files, write_csv_from_nested)
 import os
 import sys

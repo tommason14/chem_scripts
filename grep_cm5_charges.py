@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from chem_assistant import read_file, get_files, write_csv_from_nested, Molecule, Atom
+from autochem import read_file, get_files, write_csv_from_nested, Molecule, Atom
 import re
 import os
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from chem_assistant import OrcaResults
+from autochem import OrcaResults
 import glob
 
 log=glob.glob('*log')[0]

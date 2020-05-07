@@ -2,7 +2,7 @@
 import sys
 import math
 import argparse
-from chem_assistant import PeriodicTable as PT, Atom, read_xyz, write_xyz
+from autochem import PeriodicTable as PT, Atom, read_xyz, write_xyz
 
 parser = argparse.ArgumentParser()
 parser.add_argument(

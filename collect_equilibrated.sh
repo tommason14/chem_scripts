@@ -23,8 +23,12 @@ newdir="equilibrated"
 find_xyz(){
     struct="$1"
     xyz=$(find . -path "*$struct*spec*xyz")
-    echo "$struct -> $xyz"
-    cp "$xyz" "$newdir/$struct.xyz"
+    if [ ! "$xyz" = "" ]
+    then 
+      echo "$struct -> $xyz" && cp "$xyz" "$newdir/$struct.xyz"
+    else
+      echo "No equilibrated structure for $struct"
+    fi  
 }
 
 structs=$(find . -maxdepth 1 -type d | grep -v "^\.$" | awk -F'/' '{print $2}' | grep -v "$newdir")

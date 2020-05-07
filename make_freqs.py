@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from chem_assistant import GamessJob, Settings
+from autochem import GamessJob, Settings
 import os
 
 par = os.getcwd()
