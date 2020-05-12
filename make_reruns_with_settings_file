@@ -115,12 +115,11 @@ def find_calc_type(log):
     the software used
     """
     with open(log, "r") as f:
-        first_line = f.readline()
-
+        first_5_lines = f.readlines()[:5]
     software = {"GAMESS": ["GAMESS"], "Gaussian": ["Gaussian", "g16", "checkpoint"]}
 
     for calc_type, options in software.items():
-        if any(value in first_line for value in options):
+        if any(value in line for line in first_5_lines for value in options):
             return calc_type
 
 

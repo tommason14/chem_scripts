@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
-if (env | grep -Fq SLURM || env | grep -Fq TACC)
+if env | grep -Fq SLURM || env | grep -Fq TACC
 then
   squeue -o "%10i %Z %R" -u $USER | tail -n+2 | awk -F"/" '{OFS="/"; print $1,$(NF-2),$(NF-1),$NF}'
 else
-  qstat -f | grep -E "Job Id|Output_Path|\.o[0-9]"
+  qstat -f | sed -n '/Job Id/p;/WORKDIR/,/PATH/p' | grep -v 'PATH'
 fi
