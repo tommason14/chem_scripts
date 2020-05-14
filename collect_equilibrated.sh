@@ -22,7 +22,7 @@ newdir="equilibrated"
 
 find_xyz(){
     struct="$1"
-    xyz=$(find . -path "*$struct*spec*xyz")
+    xyz=$(find . -path "*/$struct/*spec*xyz")
     if [ ! "$xyz" = "" ]
     then 
       echo "$struct -> $xyz" && cp "$xyz" "$newdir/$struct.xyz"
