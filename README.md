@@ -1,2 +1,3 @@
 # chem_scripts
-Scripts that are useful in comp chemistry, but that do not fit into other repos
+
+DEPRECATED. All of these scripts are now present in the [scripts](github.com/tommason14/scripts) repo.
